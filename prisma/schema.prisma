@@ -1,0 +1,175 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  user
+  admin
+}
+
+model Users {
+  id              Int               @id @default(autoincrement())
+  fullName        String
+  nickname        String            @unique
+  email           String            @unique
+  phone           String            @unique
+  password        String
+  gender          String
+  profileImage    String?
+  dateOfBirth     String
+  userType        UserType
+  userBarberSalon UserBarberSalon[]
+  review          Reviews[]
+  reviewLike      ReviewLike[]
+}
+
+model BarberSalons {
+  id                       Int                        @id @default(autoincrement())
+  name                     String
+  address                  String
+  rate                     Int
+  openStatus               Boolean
+  website                  String
+  userBarberSalon          UserBarberSalon[]
+  aboutUs                  AboutUs?
+  services                 Services[]
+  packages                 Packages[]
+  review                   Reviews[]
+  barberSalonCategory      BarberSalonCategory[]
+  barberSalonBannerImages  BarberSalonBannerImages[]
+  barberSalonBannerGallary BarberSalonBannerGallary[]
+}
+
+model BarberSalonBannerImages {
+  id            Int          @id @default(autoincrement())
+  bannerImage   String
+  barberSalonId Int
+  barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
+}
+
+model BarberSalonBannerGallary {
+  id            Int          @id @default(autoincrement())
+  gallaryImage  String
+  barberSalonId Int
+  barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
+}
+
+model UserBarberSalon {
+  id            Int          @id @default(autoincrement())
+  jobTitle      String
+  userId        Int
+  user          Users        @relation(fields: [userId], references: [id])
+  barberSalonId Int
+  barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
+}
+
+model AboutUs {
+  id            Int          @id @default(autoincrement())
+  description   String
+  workingHours  String
+  contactUs     String
+  address       String
+  barberSalonId Int          @unique
+  barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
+}
+
+model Services {
+  id             Int              @id @default(autoincrement())
+  serviceName    String
+  types          ServiceTyps[]
+  barberSalon    BarberSalons     @relation(fields: [barberSalonId], references: [id])
+  barberSalonId  Int
+  servicePackage ServicePackage[]
+}
+
+model ServiceTyps {
+  id         Int      @id @default(autoincrement())
+  typeName   String
+  typeImage  String?
+  services   Services @relation(fields: [servicesId], references: [id])
+  servicesId Int
+}
+
+model Packages {
+  id             Int              @id @default(autoincrement())
+  name           String
+  description    String
+  price          Int
+  servicePackage ServicePackage[]
+  barberSalon    BarberSalons     @relation(fields: [barberSalonId], references: [id])
+  barberSalonId  Int
+}
+
+model ServicePackage {
+  id        Int      @id @default(autoincrement())
+  serviceId Int
+  services  Services @relation(fields: [serviceId], references: [id])
+  packageId Int
+  packages  Packages @relation(fields: [packageId], references: [id])
+}
+
+model Reviews {
+  id            Int          @id @default(autoincrement())
+  rate          Int
+  review        String
+  createdAt     DateTime     @default(now())
+  creatorId     Int
+  creator       Users        @relation(fields: [creatorId], references: [id])
+  barberSalonId Int
+  barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
+  reviewLike    ReviewLike[]
+}
+
+model ReviewLike {
+  id       Int     @id @default(autoincrement())
+  userId   Int
+  user     Users   @relation(fields: [userId], references: [id])
+  reviewId Int
+  review   Reviews @relation(fields: [reviewId], references: [id])
+}
+
+model Booking {
+  id           Int            @id @default(autoincrement())
+  serviceTypes Int[]
+  packageId    Int?
+  bookingDate  DateTime
+  status       BookingStatus?
+}
+
+enum BookingState {
+  UpComing
+  Completed
+  Cancelled
+}
+
+model BookingStatus {
+  id        Int          @id @default(autoincrement())
+  state     BookingState
+  bookingId Int          @unique
+  booking   Booking      @relation(fields: [bookingId], references: [id])
+}
+
+model Categories {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  barberSalonCategory BarberSalonCategory[]
+}
+
+model BarberSalonCategory {
+  id            Int          @id @default(autoincrement())
+  barberSalonId Int
+  barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
+  categoryId    Int
+  category      Categories   @relation(fields: [categoryId], references: [id])
+}
