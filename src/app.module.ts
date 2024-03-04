@@ -7,6 +7,7 @@ import { HomeModule } from './home/home.module';
 import { CategoryModule } from './category/category.module';
 import { DiscoverModule } from './discover/discover.module';
 import { BarberSalonModule } from './barber-salon/barber-salon.module';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { BarberSalonModule } from './barber-salon/barber-salon.module';
     CategoryModule,
     DiscoverModule,
     BarberSalonModule,
+    BookingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

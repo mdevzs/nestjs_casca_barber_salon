@@ -19,19 +19,22 @@ enum UserType {
 }
 
 model Users {
-  id              Int               @id @default(autoincrement())
-  fullName        String
-  nickname        String            @unique
-  email           String            @unique
-  phone           String            @unique
-  password        String
-  gender          String
-  profileImage    String?
-  dateOfBirth     String
-  userType        UserType
-  userBarberSalon UserBarberSalon[]
-  review          Reviews[]
-  reviewLike      ReviewLike[]
+  id                 Int               @id @default(autoincrement())
+  fullName           String
+  nickname           String            @unique
+  email              String            @unique
+  phone              String            @unique
+  password           String
+  gender             String
+  profileImage       String?
+  dateOfBirth        String
+  address            String?
+  userType           UserType
+  userBarberSalon    UserBarberSalon[]
+  review             Reviews[]
+  reviewLike         ReviewLike[]
+  bookingCreator     Booking[]         @relation(name: "creatorUser")
+  bookingSpecialUser Booking[]         @relation(name: "specialUser")
 }
 
 model BarberSalons {
@@ -50,6 +53,7 @@ model BarberSalons {
   barberSalonCategory      BarberSalonCategory[]
   barberSalonBannerImages  BarberSalonBannerImages[]
   barberSalonBannerGallary BarberSalonBannerGallary[]
+  booking                  Booking[]
 }
 
 model BarberSalonBannerImages {
@@ -93,12 +97,18 @@ model Services {
   servicePackage ServicePackage[]
 }
 
+enum ServiceTypsGender {
+  Man
+  Woman
+}
+
 model ServiceTyps {
-  id         Int      @id @default(autoincrement())
+  id         Int               @id @default(autoincrement())
   typeName   String
   typeImage  String?
   price      Float
-  services   Services @relation(fields: [servicesId], references: [id])
+  gender     ServiceTypsGender
+  services   Services          @relation(fields: [servicesId], references: [id])
   servicesId Int
 }
 
@@ -141,26 +151,33 @@ model ReviewLike {
   review   Reviews @relation(fields: [reviewId], references: [id])
 }
 
-model Booking {
-  id           Int            @id @default(autoincrement())
-  serviceTypes Int[]
-  packageId    Int?
-  bookingDate  DateTime
-  status       BookingStatus?
-}
-
 enum BookingState {
   UpComing
   Completed
   Cancelled
 }
 
-model BookingStatus {
-  id        Int          @id @default(autoincrement())
-  state     BookingState
-  bookingId Int          @unique
-  booking   Booking      @relation(fields: [bookingId], references: [id])
+model Booking {
+  id            Int          @id @default(autoincrement())
+  serviceTypes  Int[]
+  packageId     Int?
+  bookingDate   DateTime
+  bookingHour   String
+  specialUserId Int
+  specialUser   Users        @relation(name: "specialUser", fields: [specialUserId], references: [id])
+  creatorUserId Int
+  creatorUser   Users        @relation(name: "creatorUser", fields: [creatorUserId], references: [id])
+  barberSalonId Int
+  barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
+  state         BookingState
 }
+
+// model BookingStatus {
+//   id        Int          @id @default(autoincrement())
+//   state     BookingState
+//   bookingId Int          @unique
+//   booking   Booking      @relation(fields: [bookingId], references: [id])
+// }
 
 model Categories {
   id                  Int                   @id @default(autoincrement())
