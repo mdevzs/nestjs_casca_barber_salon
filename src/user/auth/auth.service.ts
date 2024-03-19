@@ -42,7 +42,7 @@ export class AuthService {
                 userType: UserType.user
             }
         })
-        const token = await this.generateJWT(user.id, user.fullName)
+        const token = await this.generateJWT(parseInt(user.id), user.fullName)
         return new UserResponseDto({
             ...user,
             profileImage: user.profileImage != null ? `http://192.168.0.103:3000/profile/images/${user.profileImage}` : null,
@@ -68,7 +68,7 @@ export class AuthService {
             throw new HttpException("Invalid Credential", 400)
         }
 
-        const token = await this.generateJWT(userExist.id, userExist.fullName)
+        const token = await this.generateJWT(parseInt(userExist.id), userExist.fullName)
         return new UserResponseDto({
             ...userExist,
             profileImage: userExist.profileImage != null ? `http://192.168.0.103:3000/profile/images/${userExist.profileImage}` : null,

@@ -9,7 +9,7 @@ export class CategoryService {
     async getBarberSalonsFromCategoryByCategoryId(categoryId: string) {
         const category = await this.prismaService.categories.findUnique(
             {
-                where: { id: parseInt(categoryId) },
+                where: { id: categoryId },
                 include: {
                     barberSalonCategory: {
                         include: { barberSalon: true }
@@ -23,7 +23,7 @@ export class CategoryService {
                 salonsWithImage.push(
                     new ResponseBarberSalonWithImageDto(
                         {
-                            id: ca.barberSalon.id,
+                            id: parseInt(ca.barberSalon.id),
                             name: ca.barberSalon.name,
                             address: ca.barberSalon.address,
                             profileImage: `http://192.168.0.103:3500/home/images/${ca.barberSalon.profileImage}`,

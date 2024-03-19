@@ -12,7 +12,7 @@ export class DiscoverService {
             const categoryBarberSalons = await this.prismaService.categories.findUnique(
                 {
                     where: {
-                        id: parseInt(categoryId),
+                        id: categoryId,
                     },
                     include: {
                         barberSalonCategory: {
@@ -33,26 +33,26 @@ export class DiscoverService {
                 }
             )
             //if (categoryBarberSalons) {
-                var salonsWithImage = []
-                categoryBarberSalons.barberSalonCategory.map(ca => {
-                    salonsWithImage.push(
-                        new ResponseBarberSalonWithImageDto(
-                            {
-                                id: ca.barberSalon.id,
-                                name: ca.barberSalon.name,
-                                address: ca.barberSalon.address,
-                                profileImage: `http://192.168.0.103:3500/home/images/${ca.barberSalon.profileImage}`,
-                                openStatus: ca.barberSalon.openStatus,
-                                rate: ca.barberSalon.rate,
-                                website: ca.barberSalon.website,
-                            }
-                        )
+            var salonsWithImage = []
+            categoryBarberSalons.barberSalonCategory.map(ca => {
+                salonsWithImage.push(
+                    new ResponseBarberSalonWithImageDto(
+                        {
+                            id: parseInt(ca.barberSalon.id),
+                            name: ca.barberSalon.name,
+                            address: ca.barberSalon.address,
+                            profileImage: `http://192.168.0.103:3500/home/images/${ca.barberSalon.profileImage}`,
+                            openStatus: ca.barberSalon.openStatus,
+                            rate: ca.barberSalon.rate,
+                            website: ca.barberSalon.website,
+                        }
                     )
-                })
-                return salonsWithImage;
+                )
+            })
+            return salonsWithImage;
             //} else {
             //    throw new NotFoundException()
-           // }
+            // }
 
         } else {
             //return all barberSalons from all categories base on search and rate
@@ -77,25 +77,25 @@ export class DiscoverService {
                 },
             )
             //if (categoriesBarberSalons) {
-                var salonsWithImage = []
-                categoriesBarberSalons.map(b => {
-                    b.barberSalonCategory.map(ca => {
-                        salonsWithImage.push(
-                            new ResponseBarberSalonWithImageDto(
-                                {
-                                    id: ca.barberSalon.id,
-                                    name: ca.barberSalon.name,
-                                    address: ca.barberSalon.address,
-                                    profileImage: `http://192.168.0.103:3500/home/images/${ca.barberSalon.profileImage}`,
-                                    openStatus: ca.barberSalon.openStatus,
-                                    rate: ca.barberSalon.rate,
-                                    website: ca.barberSalon.website,
-                                }
-                            )
+            var salonsWithImage = []
+            categoriesBarberSalons.map(b => {
+                b.barberSalonCategory.map(ca => {
+                    salonsWithImage.push(
+                        new ResponseBarberSalonWithImageDto(
+                            {
+                                id: parseInt(ca.barberSalon.id),
+                                name: ca.barberSalon.name,
+                                address: ca.barberSalon.address,
+                                profileImage: `http://192.168.0.103:3500/home/images/${ca.barberSalon.profileImage}`,
+                                openStatus: ca.barberSalon.openStatus,
+                                rate: ca.barberSalon.rate,
+                                website: ca.barberSalon.website,
+                            }
                         )
-                    })
+                    )
                 })
-                return salonsWithImage;
+            })
+            return salonsWithImage;
             //} else {
             //    throw new NotFoundException()
             //}

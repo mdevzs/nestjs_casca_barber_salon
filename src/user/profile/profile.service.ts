@@ -10,7 +10,7 @@ export class ProfileService {
     async profile(profileId: number) {
         const user = await this.prismaService.users.findUnique({
             where: {
-                id: profileId
+                id: profileId.toString()
             },
         })
 
@@ -27,7 +27,7 @@ export class ProfileService {
     ) {
 
         const user = await this.prismaService.users.findUnique({
-            where: { id: profileId },
+            where: { id: profileId.toString() },
         })
 
         const updateUser = await this.prismaService.users.update({
@@ -41,7 +41,7 @@ export class ProfileService {
                 profileImage: profileImage != undefined ? profileImage.filename : user.profileImage,
             },
             where: {
-                id: profileId
+                id: profileId.toString()
             }
         })
         return new UserResponseDto({

@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
@@ -19,7 +19,7 @@ enum UserType {
 }
 
 model Users {
-  id                 Int               @id @default(autoincrement())
+  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
   fullName           String
   nickname           String            @unique
   email              String            @unique
@@ -38,7 +38,7 @@ model Users {
 }
 
 model BarberSalons {
-  id                       Int                        @id @default(autoincrement())
+  id                       String                     @id @default(auto()) @map("_id") @db.ObjectId
   name                     String
   address                  String
   profileImage             String?
@@ -57,43 +57,47 @@ model BarberSalons {
 }
 
 model BarberSalonBannerImages {
-  id            Int          @id @default(autoincrement())
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
   bannerImage   String
-  barberSalonId Int
+  barberSalonId String       @db.ObjectId
   barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
 }
 
 model BarberSalonBannerGallary {
-  id            Int          @id @default(autoincrement())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   gallaryImage  String
-  barberSalonId Int
+  barberSalonId String       @db.ObjectId
   barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
 }
 
 model UserBarberSalon {
-  id            Int          @id @default(autoincrement())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   jobTitle      String
-  userId        Int
+  userId        String       @db.ObjectId
   user          Users        @relation(fields: [userId], references: [id])
-  barberSalonId Int
+  barberSalonId String       @db.ObjectId
   barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
 }
 
 model AboutUs {
-  id            Int          @id @default(autoincrement())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   description   String
   contactUs     String
   address       String
-  barberSalonId Int          @unique
+  barberSalonId String       @unique @db.ObjectId
   barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
 }
 
 model Services {
-  id             Int              @id @default(autoincrement())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   serviceName    String
   types          ServiceTyps[]
   barberSalon    BarberSalons     @relation(fields: [barberSalonId], references: [id])
-  barberSalonId  Int
+  barberSalonId  String           @db.ObjectId
   servicePackage ServicePackage[]
 }
 
@@ -103,51 +107,56 @@ enum ServiceTypsGender {
 }
 
 model ServiceTyps {
-  id         Int               @id @default(autoincrement())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   typeName   String
   typeImage  String?
   price      Float
   gender     ServiceTypsGender
   services   Services          @relation(fields: [servicesId], references: [id])
-  servicesId Int
+  servicesId String            @db.ObjectId
 }
 
 model Packages {
-  id             Int              @id @default(autoincrement())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   name           String
   description    String
   packageImage   String?
   price          Int
   servicePackage ServicePackage[]
   barberSalon    BarberSalons     @relation(fields: [barberSalonId], references: [id])
-  barberSalonId  Int
+  barberSalonId  String           @db.ObjectId
 }
 
 model ServicePackage {
-  id        Int      @id @default(autoincrement())
-  serviceId Int
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  serviceId String   @db.ObjectId
   services  Services @relation(fields: [serviceId], references: [id])
-  packageId Int
+  packageId String   @db.ObjectId
   packages  Packages @relation(fields: [packageId], references: [id])
 }
 
 model Reviews {
-  id            Int          @id @default(autoincrement())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   rate          Int
   review        String
   createdAt     DateTime     @default(now())
-  creatorId     Int
+  creatorId     String       @db.ObjectId
   creator       Users        @relation(fields: [creatorId], references: [id])
-  barberSalonId Int
+  barberSalonId String       @db.ObjectId
   barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
   reviewLike    ReviewLike[]
 }
 
 model ReviewLike {
-  id       Int     @id @default(autoincrement())
-  userId   Int
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId   String  @db.ObjectId
   user     Users   @relation(fields: [userId], references: [id])
-  reviewId Int
+  reviewId String  @db.ObjectId
   review   Reviews @relation(fields: [reviewId], references: [id])
 }
 
@@ -158,16 +167,17 @@ enum BookingState {
 }
 
 model Booking {
-  id            Int          @id @default(autoincrement())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   serviceTypes  Int[]
   packageId     Int?
   bookingDate   DateTime
   bookingHour   String
-  specialUserId Int
+  specialUserId String       @db.ObjectId
   specialUser   Users        @relation(name: "specialUser", fields: [specialUserId], references: [id])
-  creatorUserId Int
+  creatorUserId String       @db.ObjectId
   creatorUser   Users        @relation(name: "creatorUser", fields: [creatorUserId], references: [id])
-  barberSalonId Int
+  barberSalonId String       @db.ObjectId
   barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
   state         BookingState
 }
@@ -180,21 +190,22 @@ model Booking {
 // }
 
 model Categories {
-  id                  Int                   @id @default(autoincrement())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   name                String
   categoryImage       String?
   barberSalonCategory BarberSalonCategory[]
 }
 
 model BarberSalonCategory {
-  id            Int          @id @default(autoincrement())
-  barberSalonId Int
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  barberSalonId String       @db.ObjectId
   barberSalon   BarberSalons @relation(fields: [barberSalonId], references: [id])
-  categoryId    Int
+  categoryId    String       @db.ObjectId
   category      Categories   @relation(fields: [categoryId], references: [id])
 }
 
 model Banners {
-  id          Int    @id @default(autoincrement())
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
   bannerImage String
 }

@@ -8,7 +8,7 @@ export class PackagesService {
     async getBarberSalonPackages(barberSalonId: string) {
         const packagesT = await this.prismaService.packages.findMany(
             {
-                where: { barberSalonId: parseInt(barberSalonId) },
+                where: { barberSalonId: barberSalonId },
                 include: {
                     servicePackage: {
                         include: { services: true }

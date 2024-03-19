@@ -10,12 +10,12 @@ export class BarberSalonService {
     async getBarberSalonById(id: string, userId: number) {
         const barberSalon = await this.prismaService.barberSalons.findUnique(
             {
-                where: { id: parseInt(id) }
+                where: { id: id }
             }
         )
         const barberSalonsProfileImagesT = await this.prismaService.barberSalonBannerImages.findMany({
             where: {
-                barberSalonId: parseInt(id)
+                barberSalonId: id
             }
         })
         const barberSalonsProfileImages = []
@@ -26,7 +26,7 @@ export class BarberSalonService {
         })
         const specialListUserT = await this.prismaService.userBarberSalon.findMany({
             where: {
-                barberSalonId: parseInt(id)
+                barberSalonId: id
             },
             include: {
                 user: true
@@ -93,7 +93,7 @@ export class BarberSalonService {
 
         const aboutUs = await this.prismaService.aboutUs.findUnique(
             {
-                where: { barberSalonId: parseInt(id) }
+                where: { barberSalonId: id }
             }
         )
 
@@ -121,7 +121,7 @@ export class BarberSalonService {
 
         const packagesT = await this.prismaService.packages.findMany(
             {
-                where: { barberSalonId: parseInt(id) }
+                where: { barberSalonId: id }
             }
         )
         const packages = [];
@@ -136,7 +136,7 @@ export class BarberSalonService {
 
         const gallariesT = await this.prismaService.barberSalonBannerGallary.findMany(
             {
-                where: { barberSalonId: parseInt(id) }
+                where: { barberSalonId: id }
             }
         )
         const gallaries = [];
@@ -153,7 +153,7 @@ export class BarberSalonService {
         const reviewT = await this.prismaService.reviews.findMany(
             {
                 where: {
-                    barberSalonId: parseInt(id)
+                    barberSalonId: id
                 },
                 include: { creator: true }
             }
@@ -162,13 +162,13 @@ export class BarberSalonService {
         for (let i = 0; i < reviewT.length; i++) {
             var currentUserLiked = false
             const re = reviewT[i]
-            const reviewLikeCounts = await this.getReviewLikes(re.id)
-            
+            const reviewLikeCounts = await this.getReviewLikes(parseInt(re.id))
+
             //ckeck if the current use like the review
             for (let j = 0; j < reviewLikesT.length; j++) {
                 const element = reviewLikesT[j];
                 if (re.id === element.reviewId) {
-                    if (element.userId === userId) {
+                    if (element.userId === userId.toString()) {
                         currentUserLiked = true
                         break;
                     }
@@ -205,7 +205,7 @@ export class BarberSalonService {
     async getReviewLikes(reviewId: number) {
         const reviewLikeCounts = await this.prismaService.reviewLike.count({
             where: {
-                reviewId: reviewId
+                reviewId: reviewId.toString()
             }
         })
 

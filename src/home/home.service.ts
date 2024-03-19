@@ -8,7 +8,7 @@ export class HomeService {
 
   async home(userId: number) {
     const user = await this.prismaService.users.findUnique(
-      { where: { id: userId } }
+      { where: { id: userId.toString() } }
     )
     const banners = await this.prismaService.banners.findMany()
     const bannersImage = banners.map(banner => new ResponseBannerDto({ ...banner, bannerImage: `http://192.168.0.103:3500/home/images/${banner.bannerImage}` }))
@@ -30,7 +30,7 @@ export class HomeService {
         salonsWithImage.push(
           new ResponseBarberSalonWithImageDto(
             {
-              id: ca.barberSalon.id,
+              id: parseInt(ca.barberSalon.id),
               name: ca.barberSalon.name,
               address: ca.barberSalon.address,
               profileImage: `http://192.168.0.103:3500/home/images/${ca.barberSalon.profileImage}`,

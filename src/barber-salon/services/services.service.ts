@@ -9,7 +9,7 @@ export class ServicesService {
     async getBarberSalonServices(barberSalonId: string) {
         const servicesT = await this.prismaService.services.findMany({
             where: {
-                barberSalonId: parseInt(barberSalonId)
+                barberSalonId: barberSalonId
             },
             include: {
                 types: true
