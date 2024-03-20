@@ -10,7 +10,7 @@ export class AuthController {
 
     @UseInterceptors(FileInterceptor('profileImage', {
         storage: diskStorage({
-            destination: './uploads/images',
+            destination: '/tmp',
             filename: (req, file, cb) => {
                 const name = file.originalname.split('.')[0]
                 const fileExtentios = file.originalname.split('.')[1]
