@@ -17,6 +17,6 @@ export class BarberSalonController {
 
   @Get('images/:fileId')
   async getfileUpload(@Param('fileId') fileId, @Res() res) {
-    res.sendFile(fileId, { root: './uploads/images' });
+    res.sendFile(fileId, { root: '/tmp' });
   }
 }

@@ -45,7 +45,7 @@ export class AuthService {
         const token = await this.generateJWT(parseInt(user.id), user.fullName)
         return new UserResponseDto({
             ...user,
-            profileImage: user.profileImage != null ? `http://192.168.0.103:3000/profile/images/${user.profileImage}` : null,
+            profileImage: user.profileImage != null ? `${process.env.URL}/profile/images/${user.profileImage}` : null,
             token,
         });
     }
@@ -71,7 +71,7 @@ export class AuthService {
         const token = await this.generateJWT(parseInt(userExist.id), userExist.fullName)
         return new UserResponseDto({
             ...userExist,
-            profileImage: userExist.profileImage != null ? `http://192.168.0.103:3000/profile/images/${userExist.profileImage}` : null,
+            profileImage: userExist.profileImage != null ? `${process.env.URL}/profile/images/${userExist.profileImage}` : null,
             token
         })
     }

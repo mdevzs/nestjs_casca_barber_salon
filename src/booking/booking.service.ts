@@ -110,7 +110,7 @@ export class BookingService {
                 packge,
                 barberSalon: {
                     ...booked.barberSalon,
-                    profileImage: booked.barberSalon.profileImage != null ? `http://192.168.0.103:3500/barber-salon/images/${booked.barberSalon.profileImage}` : null
+                    profileImage: booked.barberSalon.profileImage != null ? `${process.env.URL}/barber-salon/images/${booked.barberSalon.profileImage}` : null
                 }
             }
             if (booked.state === BookingState.UpComing) {

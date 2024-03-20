@@ -16,7 +16,7 @@ export class ProfileService {
 
         return new ResponseProfileDto({
             ...user,
-            profileImage: user.profileImage != null ? `http://192.168.0.103:3000/profile/images/${user.profileImage}` : null,
+            profileImage: user.profileImage != null ? `${process.env.URL}/profile/images/${user.profileImage}` : null,
         },);
     }
 
@@ -46,7 +46,7 @@ export class ProfileService {
         })
         return new UserResponseDto({
             ...updateUser,
-            profileImage: updateUser.profileImage != null ? `http://192.168.0.103:3000/profile/images/${updateUser.profileImage}` : null,
+            profileImage: updateUser.profileImage != null ? `${process.env.URL}/profile/images/${updateUser.profileImage}` : null,
         });
 
     }

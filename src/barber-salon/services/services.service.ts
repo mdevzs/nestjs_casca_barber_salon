@@ -25,14 +25,14 @@ export class ServicesService {
                     manTypes.push(
                         {
                             ...t,
-                            typeImage: t.typeImage !== null ? `http://192.168.0.103:3500/barber-salon/images/${t.typeImage}` : null
+                            typeImage: t.typeImage !== null ? `${process.env.URL}/barber-salon/images/${t.typeImage}` : null
                         }
                     )
                 } else {
                     womanTypes.push(
                         {
                             ...t,
-                            typeImage: t.typeImage !== null ? `http://192.168.0.103:3500/barber-salon/images/${t.typeImage}` : null
+                            typeImage: t.typeImage !== null ? `${process.env.URL}/barber-salon/images/${t.typeImage}` : null
                         }
                     )
                 }

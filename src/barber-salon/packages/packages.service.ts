@@ -29,7 +29,7 @@ export class PackagesService {
                 {
                     ...pac,
                     servicePackage: services,
-                    packageImage: pac.packageImage !== null ? `http://192.168.0.103:3500/barber-salon/images/${pac.packageImage}` : null
+                    packageImage: pac.packageImage !== null ? `${process.env.URL}/barber-salon/images/${pac.packageImage}` : null
                 }
             )
             services = []

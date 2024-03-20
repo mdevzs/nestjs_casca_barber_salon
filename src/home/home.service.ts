@@ -11,9 +11,9 @@ export class HomeService {
       { where: { id: userId.toString() } }
     )
     const banners = await this.prismaService.banners.findMany()
-    const bannersImage = banners.map(banner => new ResponseBannerDto({ ...banner, bannerImage: `http://192.168.0.103:3500/home/images/${banner.bannerImage}` }))
+    const bannersImage = banners.map(banner => new ResponseBannerDto({ ...banner, bannerImage: `${process.env.URL}/home/images/${banner.bannerImage}` }))
     const categories = await this.prismaService.categories.findMany()
-    const categoriesImage = categories.map(category => new ResponseCategoriesDto({ ...category, categoryImage: `http://192.168.0.103:3500/home/images/${category.categoryImage}` }))
+    const categoriesImage = categories.map(category => new ResponseCategoriesDto({ ...category, categoryImage: `${process.env.URL}/home/images/${category.categoryImage}` }))
     const nearbyYourLocationBarberSalons = await this.prismaService.categories.findMany(
       {
         include: {
@@ -33,7 +33,7 @@ export class HomeService {
               id: parseInt(ca.barberSalon.id),
               name: ca.barberSalon.name,
               address: ca.barberSalon.address,
-              profileImage: `http://192.168.0.103:3500/home/images/${ca.barberSalon.profileImage}`,
+              profileImage: `${process.env.URL}/home/images/${ca.barberSalon.profileImage}`,
               openStatus: ca.barberSalon.openStatus,
               rate: ca.barberSalon.rate,
               website: ca.barberSalon.website,
@@ -44,7 +44,7 @@ export class HomeService {
       categoryWithBarberSalons.push(
         new ResponseCategoryBarberSalonDto(
           {
-            ...b, categoryImage: `http://192.168.0.103:3500/home/images/${b.categoryImage}`,
+            ...b, categoryImage: `${process.env.URL}/home/images/${b.categoryImage}`,
             barberSalons: salonsWithImage,
           },
         ),

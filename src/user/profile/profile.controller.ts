@@ -19,7 +19,7 @@ export class ProfileController {
 
     @UseInterceptors(FileInterceptor('profileImage', {
         storage: diskStorage({
-            destination: './uploads/images',
+            destination: '/tmp',
             filename: (req, file, cb) => {
                 const name = file.originalname.split('.')[0]
                 const fileExtentios = file.originalname.split('.')[1]
@@ -51,6 +51,6 @@ export class ProfileController {
 
     @Get('images/:fileId')
     async getfileUpload(@Param('fileId') fileId, @Res() res) {
-        res.sendFile(fileId, { root: './uploads/images' });
+        res.sendFile(fileId, { root: '/tmp' });
     }
 }

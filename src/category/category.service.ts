@@ -26,7 +26,7 @@ export class CategoryService {
                             id: parseInt(ca.barberSalon.id),
                             name: ca.barberSalon.name,
                             address: ca.barberSalon.address,
-                            profileImage: `http://192.168.0.103:3500/home/images/${ca.barberSalon.profileImage}`,
+                            profileImage: `${process.env.URL}/home/images/${ca.barberSalon.profileImage}`,
                             openStatus: ca.barberSalon.openStatus,
                             rate: ca.barberSalon.rate,
                             website: ca.barberSalon.website,
@@ -36,7 +36,7 @@ export class CategoryService {
             })
             return new ResponseCategoryBarberSalonDto(
                 {
-                    ...category, categoryImage: `http://192.168.0.103:3500/home/images/${category.categoryImage}`,
+                    ...category, categoryImage: `${process.env.URL}/home/images/${category.categoryImage}`,
                     barberSalons: salonsWithImage,
                 },
             );
