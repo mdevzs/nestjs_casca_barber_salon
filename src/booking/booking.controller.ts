@@ -28,7 +28,7 @@ export class BookingController {
   @Get('/:id/cancel')
   async cancelBook(
     @Req() { user },
-    @Param('id') bookingId: number,
+    @Param('id') bookingId: string,
   ) {
     return this.bookingService.cancelBook(bookingId, user.id)
   }

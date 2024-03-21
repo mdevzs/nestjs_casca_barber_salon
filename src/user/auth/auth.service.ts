@@ -42,7 +42,7 @@ export class AuthService {
                 userType: UserType.user
             }
         })
-        const token = await this.generateJWT(parseInt(user.id), user.fullName)
+        const token = await this.generateJWT(user.id, user.fullName)
         return new UserResponseDto({
             ...user,
             profileImage: user.profileImage != null ? `${process.env.URL}/profile/images/${user.profileImage}` : null,
@@ -68,7 +68,7 @@ export class AuthService {
             throw new HttpException("Invalid Credential", 400)
         }
 
-        const token = await this.generateJWT(parseInt(userExist.id), userExist.fullName)
+        const token = await this.generateJWT(userExist.id, userExist.fullName)
         return new UserResponseDto({
             ...userExist,
             profileImage: userExist.profileImage != null ? `${process.env.URL}/profile/images/${userExist.profileImage}` : null,
@@ -76,7 +76,7 @@ export class AuthService {
         })
     }
 
-    private generateJWT(id: number, name: string) {
+    private generateJWT(id: string, name: string) {
         return this.jwtService.signAsync({ 'id': id, 'name': name })
     }
 }

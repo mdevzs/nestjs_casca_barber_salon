@@ -40,7 +40,7 @@ export class ResponseCategoryBarberSalonDto {
 }
 
 export class ResponseBarberSalonWithImageDto {
-    id: number
+    id: string
     name: string
     address: string
     profileImage: string

@@ -25,14 +25,14 @@ export class ServicesService {
                     manTypes.push(
                         {
                             ...t,
-                            typeImage: t.typeImage !== null ? `${process.env.URL}/barber-salon/images/${t.typeImage}` : null
+                            typeImage: t.typeImage !== null && t.typeImage.startsWith('http') ? t.typeImage : `${process.env.URL}/barber-salon/images/${t.typeImage}`
                         }
                     )
                 } else {
                     womanTypes.push(
                         {
                             ...t,
-                            typeImage: t.typeImage !== null ? `${process.env.URL}/barber-salon/images/${t.typeImage}` : null
+                            typeImage: t.typeImage !== null && t.typeImage.startsWith('http') ? t.typeImage : `${process.env.URL}/barber-salon/images/${t.typeImage}`
                         }
                     )
                 }

@@ -38,10 +38,10 @@ export class DiscoverService {
                 salonsWithImage.push(
                     new ResponseBarberSalonWithImageDto(
                         {
-                            id: parseInt(ca.barberSalon.id),
+                            id: ca.barberSalon.id,
                             name: ca.barberSalon.name,
                             address: ca.barberSalon.address,
-                            profileImage: `${process.env.URL}/home/images/${ca.barberSalon.profileImage}`,
+                            profileImage: ca.barberSalon.profileImage.startsWith('http') ? ca.barberSalon.profileImage : `${process.env.URL}/home/images/${ca.barberSalon.profileImage}`,
                             openStatus: ca.barberSalon.openStatus,
                             rate: ca.barberSalon.rate,
                             website: ca.barberSalon.website,
@@ -83,10 +83,10 @@ export class DiscoverService {
                     salonsWithImage.push(
                         new ResponseBarberSalonWithImageDto(
                             {
-                                id: parseInt(ca.barberSalon.id),
+                                id: ca.barberSalon.id,
                                 name: ca.barberSalon.name,
                                 address: ca.barberSalon.address,
-                                profileImage: `${process.env.URL}/home/images/${ca.barberSalon.profileImage}`,
+                                profileImage: ca.barberSalon.profileImage.startsWith('http') ? ca.barberSalon.profileImage : `${process.env.URL}/home/images/${ca.barberSalon.profileImage}`,
                                 openStatus: ca.barberSalon.openStatus,
                                 rate: ca.barberSalon.rate,
                                 website: ca.barberSalon.website,

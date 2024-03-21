@@ -9,16 +9,16 @@ export class BookingService {
 
     async bookBarberSalon(
         { barberSalonId, bookingDate, bookingHour, specialUserId, packageId, serviceTypes }: BookingDto,
-        userId: number,
+        userId: string,
     ) {
         const bookBSalon = await this.prismaService.booking.create(
             {
                 data: {
-                    creatorUserId: userId.toString(),
-                    barberSalonId: barberSalonId.toString(),
+                    creatorUserId: userId,
+                    barberSalonId: barberSalonId,
                     bookingDate,
                     bookingHour,
-                    specialUserId: specialUserId.toString(),
+                    specialUserId: specialUserId,
                     serviceTypes,
                     packageId,
                     state: BookingState.UpComing
@@ -31,7 +31,7 @@ export class BookingService {
                 const serTypeT = await this.prismaService.serviceTyps.findUnique(
                     {
                         where: {
-                            id: serviceTypes[i].toString()
+                            id: serviceTypes[i]
                         }
                     }
                 )
@@ -48,7 +48,7 @@ export class BookingService {
         if (packageId != null) {
             const packageT = await this.prismaService.packages.findUnique(
                 {
-                    where: { id: packageId.toString() }
+                    where: { id: packageId }
                 }
             )
             packge = packageT;
@@ -60,10 +60,10 @@ export class BookingService {
         };
     }
 
-    async getAllBooked(userId: number) {
+    async getAllBooked(userId: string) {
         const allBooked = await this.prismaService.booking.findMany({
             where: {
-                creatorUserId: userId.toString()
+                creatorUserId: userId
             },
             include: {
                 barberSalon: true
@@ -82,7 +82,7 @@ export class BookingService {
                     const serTypeT = await this.prismaService.serviceTyps.findUnique(
                         {
                             where: {
-                                id: booked.serviceTypes[i].toString()
+                                id: booked.serviceTypes[i]
                             }
                         }
                     )
@@ -99,7 +99,7 @@ export class BookingService {
             if (booked.packageId != null) {
                 const packageT = await this.prismaService.packages.findUnique(
                     {
-                        where: { id: booked.packageId.toString() }
+                        where: { id: booked.packageId }
                     }
                 )
                 packge = packageT;
@@ -137,19 +137,19 @@ export class BookingService {
         }
     }
 
-    async cancelBook(bookingId: number, userId: number,) {
+    async cancelBook(bookingId: string, userId: string,) {
         const bookedExist = await this.prismaService.booking.findUnique(
             {
-                where: { id: bookingId.toString() }
+                where: { id: bookingId }
             }
         )
         if (bookedExist) {
             await this.prismaService.booking.update(
                 {
                     where: {
-                        id: bookingId.toString(),
+                        id: bookingId,
                         AND: [
-                            { creatorUserId: userId.toString() }
+                            { creatorUserId: userId }
                         ]
                     },
                     data: {

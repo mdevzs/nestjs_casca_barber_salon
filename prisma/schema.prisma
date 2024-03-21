@@ -170,8 +170,8 @@ enum BookingState {
 model Booking {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  serviceTypes  Int[]
-  packageId     Int?
+  serviceTypes  String[]
+  packageId     String?
   bookingDate   DateTime
   bookingHour   String
   specialUserId String       @db.ObjectId

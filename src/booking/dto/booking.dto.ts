@@ -3,7 +3,7 @@ import { IsArray, IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from "cla
 export class BookingDto {
     @IsNotEmpty()
     @IsNumber()
-    barberSalonId: number
+    barberSalonId: string
     
     @IsNotEmpty()
     @IsDate()
@@ -15,15 +15,15 @@ export class BookingDto {
 
     @IsNotEmpty()
     @IsNumber()
-    specialUserId: number
+    specialUserId: string
 
     @IsOptional()
     @IsNotEmpty()
     @IsNumber()
-    packageId?: number
+    packageId?: string
 
     @IsOptional()
     @IsNotEmpty()
     @IsArray()
-    serviceTypes?: Array<number>
+    serviceTypes?: Array<string>
 }

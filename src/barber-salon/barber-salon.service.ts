@@ -21,7 +21,7 @@ export class BarberSalonService {
         const barberSalonsProfileImages = []
         barberSalonsProfileImagesT.map(img => {
             barberSalonsProfileImages.push(
-                { ...img, bannerImage: img.bannerImage != null ? `${process.env.URL}/barber-salon/images/${img.bannerImage}` : null }
+                { ...img, bannerImage: img.bannerImage != null && img.bannerImage.startsWith('http') ? img.bannerImage : `${process.env.URL}/barber-salon/images/${img.bannerImage}` }
             )
         })
         const specialListUserT = await this.prismaService.userBarberSalon.findMany({
@@ -38,7 +38,7 @@ export class BarberSalonService {
                 {
                     ...s,
                     user: {
-                        profileImage: s.user.profileImage !== null ? `${process.env.URL}/barber-salon/images/${s.user.profileImage}` : null,
+                        profileImage: s.user.profileImage !== null && s.user.profileImage.startsWith('http') ? s.user.profileImage : `${process.env.URL}/barber-salon/images/${s.user.profileImage}`,
                         nickname: s.user.nickname,
                     }
                 }
@@ -109,7 +109,7 @@ export class BarberSalonService {
                 types.push(
                     {
                         ...t,
-                        typeImage: t.typeImage !== null ? `${process.env.URL}/barber-salon/images/${t.typeImage}` : null
+                        typeImage: t.typeImage !== null && t.typeImage.startsWith('http') ? t.typeImage : `${process.env.URL}/barber-salon/images/${t.typeImage}`
                     }
                 )
             })
@@ -129,7 +129,7 @@ export class BarberSalonService {
             packages.push(
                 {
                     ...pac,
-                    packageImage: pac.packageImage !== null ? `${process.env.URL}/barber-salon/images/${pac.packageImage}` : null
+                    packageImage: pac.packageImage !== null && pac.packageImage.startsWith('http') ? pac.packageImage : `${process.env.URL}/barber-salon/images/${pac.packageImage}`
                 }
             )
         })
@@ -144,7 +144,7 @@ export class BarberSalonService {
             gallaries.push(
                 {
                     ...gallary,
-                    gallaryImage: gallary.gallaryImage !== null ? `${process.env.URL}/barber-salon/images/${gallary.gallaryImage}` : null
+                    gallaryImage: gallary.gallaryImage !== null && gallary.gallaryImage.startsWith('http') ? gallary.gallaryImage : `${process.env.URL}/barber-salon/images/${gallary.gallaryImage}`
                 }
             )
         })
@@ -184,7 +184,7 @@ export class BarberSalonService {
                     creator: {
                         id: re.creatorId,
                         fullName: re.creator.fullName,
-                        profileImage: re.creator.profileImage !== null ? `${process.env.URL}/barber-salon/images/${re.creator.profileImage}` : null,
+                        profileImage: re.creator.profileImage !== null && re.creator.profileImage.startsWith('http') ? re.creator.profileImage : `${process.env.URL}/barber-salon/images/${re.creator.profileImage}`,
                     }
                 },
             )

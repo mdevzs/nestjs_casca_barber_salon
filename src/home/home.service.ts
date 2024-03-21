@@ -6,14 +6,15 @@ import { HomeResponseDto, ResponseBannerDto, ResponseBarberSalonWithImageDto, Re
 export class HomeService {
   constructor(private readonly prismaService: PrismaService) { }
 
-  async home(userId: number) {
+  async home(userId: string) {
+    console.log(`userId is:${userId}`)
     const user = await this.prismaService.users.findUnique(
-      { where: { id: userId.toString() } }
+      { where: { id: userId } }
     )
     const banners = await this.prismaService.banners.findMany()
-    const bannersImage = banners.map(banner => new ResponseBannerDto({ ...banner, bannerImage: `${process.env.URL}/home/images/${banner.bannerImage}` }))
+    const bannersImage = banners.map(banner => new ResponseBannerDto({ ...banner, bannerImage: banner.bannerImage.startsWith('http') ? banner.bannerImage : `${process.env.URL}/home/images/${banner.bannerImage}` }))
     const categories = await this.prismaService.categories.findMany()
-    const categoriesImage = categories.map(category => new ResponseCategoriesDto({ ...category, categoryImage: `${process.env.URL}/home/images/${category.categoryImage}` }))
+    const categoriesImage = categories.map(category => new ResponseCategoriesDto({ ...category, categoryImage: category.categoryImage.startsWith('http') ? category.categoryImage : `${process.env.URL}/home/images/${category.categoryImage}` }))
     const nearbyYourLocationBarberSalons = await this.prismaService.categories.findMany(
       {
         include: {
@@ -30,10 +31,10 @@ export class HomeService {
         salonsWithImage.push(
           new ResponseBarberSalonWithImageDto(
             {
-              id: parseInt(ca.barberSalon.id),
+              id: ca.barberSalon.id,
               name: ca.barberSalon.name,
               address: ca.barberSalon.address,
-              profileImage: `${process.env.URL}/home/images/${ca.barberSalon.profileImage}`,
+              profileImage: ca.barberSalon.profileImage.startsWith('http') ? ca.barberSalon.profileImage : `${process.env.URL}/home/images/${ca.barberSalon.profileImage}`,
               openStatus: ca.barberSalon.openStatus,
               rate: ca.barberSalon.rate,
               website: ca.barberSalon.website,
@@ -44,7 +45,7 @@ export class HomeService {
       categoryWithBarberSalons.push(
         new ResponseCategoryBarberSalonDto(
           {
-            ...b, categoryImage: `${process.env.URL}/home/images/${b.categoryImage}`,
+            ...b, categoryImage: b.categoryImage.startsWith('http') ? b.categoryImage : `${process.env.URL}/home/images/${b.categoryImage}`,
             barberSalons: salonsWithImage,
           },
         ),
